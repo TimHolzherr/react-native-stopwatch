@@ -17,12 +17,14 @@ export const useStopwatch = (callback: (a: string) => void) => {
     }, [callback]);
 
     const [time, setTime] = useState(0);
+    const [running, setRunning] = useState(true);
 
     useEffect(() => {
         callbackRef.current(formatTime(time));
     }, [time]);            
 
     const start = useCallback(() => {
+        setRunning(true);
         intervalRef.current = <number><unknown>setInterval(() => {//TODO: Type!            
             setTime(time => time + 1);}, 
             1000); 
@@ -30,6 +32,7 @@ export const useStopwatch = (callback: (a: string) => void) => {
 
     const reset = useCallback(() => {
         setTime(0);
+        setRunning(false);
         if (intervalRef.current) {
             clearInterval(intervalRef.current);
         }        
@@ -40,7 +43,7 @@ export const useStopwatch = (callback: (a: string) => void) => {
         return reset;
     }, [start, reset]);
 
-    return {start, reset};
+    return {start, reset, running};
 };
 
 
