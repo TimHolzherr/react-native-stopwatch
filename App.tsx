@@ -20,16 +20,19 @@ const Bottom = styled.View`
 const Timer = styled.Text`
   color: #fff;
   font-size: 84px;
-  font-family: 'lucida grande'; // TODO: How do I change to another system font?
+  font-family: arial; // TODO: How do I change to another system font?
 `;
 
-const RoundButton = css`
-  border-radius: 50px;
-  background-color: green;
-  boarder-width: 20px;
-  boarder-color: green;
+const RoundButton = styled.TouchableOpacity`
   width: 100px;
   height: 100px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 100px;
+  boarder-color: green;
+  boarder-width: 50px;
+  background-color: orange;
 `;
 
 const App = () => {
@@ -41,6 +44,9 @@ const App = () => {
         <Timer>{watch}</Timer>
       </Top>
       <Bottom>
+        <RoundButton>
+          <Text>Foo</Text>
+        </RoundButton>
         {!running ? (
           <Button title="Start" onPress={start} />
         ) : (
