@@ -1,7 +1,7 @@
-import { Button, Text } from 'react-native';
+import { Button, Pressable, Text } from 'react-native';
 import React, { useState } from 'react';
+import styled, { css } from '@emotion/native'
 
-import styled from '@emotion/native'
 import { useStopwatch } from './src/useStopwatch';
 
 const Top = styled.View`
@@ -14,15 +14,22 @@ const Top = styled.View`
 const Bottom = styled.View`
 height: 50%;
 justify-content: center;  
-align-items: center;
 background-color: #000; 
 `
-
 
 const Timer = styled.Text`
   color: #fff;
   fontSize: 84px;
   font-family: 'lucida grande'; // TODO: How do I change to another system font?
+`
+
+const RoundButton = css`
+  border-radius: 50px;
+  background-color: green;
+  boarder-width: 20px;
+  boarder-color: green;  
+  width: 100px;
+  height: 100px;
 `
 
 const App = () => {
@@ -33,9 +40,9 @@ const App = () => {
        <Timer>{watch}</Timer>
      </Top>
      <Bottom>
-       <Button title="Start" onPress={start}></Button> 
-       <Button title="Reset" onPress={reset}></Button>
-       <Text>Scroll</Text>
+       <Button title="Start" onPress={start}/>
+       <Text> --- </Text>
+       <Button title="Reset" onPress={reset}/>
      </Bottom>
    </>;
  };
