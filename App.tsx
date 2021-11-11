@@ -15,6 +15,7 @@ const Bottom = styled.View`
   height: 50%;
   justify-content: center;
   background-color: #000;
+  align-items: center;
 `;
 
 const Timer = styled.Text`
@@ -23,16 +24,32 @@ const Timer = styled.Text`
   font-family: arial; // TODO: How do I change to another system font?
 `;
 
-const RoundButton = styled.TouchableOpacity`
+const RoundButton = styled.View`
   width: 100px;
   height: 100px;
   justify-content: center;
   align-items: center;
   padding: 10px;
   border-radius: 100px;
-  boarder-color: green;
-  boarder-width: 50px;
-  background-color: orange;
+  background-color: #1b361f;
+  position: relative;
+`;
+
+const Boarder = styled.View`
+  border-width: 3px;
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  border-radius: 100px;
+  width: 96px;
+  height: 96px;
+  border-color: black;
+`;
+
+const ButtonText = styled.Text`
+  font-size: 24px;
+  color: #50d137;
 `;
 
 const App = () => {
@@ -44,14 +61,15 @@ const App = () => {
         <Timer>{watch}</Timer>
       </Top>
       <Bottom>
-        <RoundButton>
-          <Text>Foo</Text>
-        </RoundButton>
-        {!running ? (
-          <Button title="Start" onPress={start} />
-        ) : (
-          <Button title="Reset" onPress={reset} />
-        )}
+        <Pressable onPress={running ? reset : start}>
+          <RoundButton
+            style={{backgroundColor: running ? '#420e0d' : '#1b361f'}}>
+            <Boarder />
+            <ButtonText style={{color: running ? '#ef4f4d' : '#50d137'}}>
+              {running ? 'Reset' : 'Start'}
+            </ButtonText>
+          </RoundButton>
+        </Pressable>
       </Bottom>
     </>
   );
