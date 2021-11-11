@@ -1,17 +1,18 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 
 const formatTime = (time: number): string => {
-  const leadingZero = (num: number) => (num < 10 ? `0${num}` : num);
-  const hours = leadingZero(Math.floor(time / 60 / 60));
-  const minutes = leadingZero(Math.floor(time / 60) % 60);
-  const seconds = leadingZero(time % 60);
+  const leadingZero = (num: number) => (num < 10 ? `0${num}` : num);  
+  const minutes = leadingZero(Math.floor(time / 60000) % 100);
+  const seconds = leadingZero(Math.floor(time / 1000) % 60);
+  const miliseconds = leadingZero(Math.floor((time / 10)) % 100);
 
-  return `${hours}:${minutes}:${seconds}`;
+  return `${minutes}:${seconds}:${miliseconds}`;
 };
 
 export const useStopwatch = (callback: (a: string) => void) => {
   const callbackRef = useRef(callback);
   const intervalRef = useRef<number>();
+  const startTimeRef = useRef<number>(0);
 
   useEffect(() => {
     callbackRef.current = callback;
@@ -26,14 +27,16 @@ export const useStopwatch = (callback: (a: string) => void) => {
 
   const start = useCallback(() => {
     setRunning(true);
+    startTimeRef.current = Date.now();
     intervalRef.current = <number>(<unknown>setInterval(() => {
       //TODO: Type!
-      setTime(time => time + 1);
-    }, 1000));
+      setTime(Date.now() - startTimeRef.current);
+    }, 11));
   }, []);
 
   const reset = useCallback(() => {
     setTime(0);
+    startTimeRef.current = 0;
     setRunning(false);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
