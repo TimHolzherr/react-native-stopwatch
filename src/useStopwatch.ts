@@ -19,7 +19,7 @@ export const useStopwatch = (callback: (a: string) => void) => {
   }, [callback]);
 
   const [time, setTime] = useState(0);
-  const [running, setRunning] = useState(true);
+  const [running, setRunning] = useState(false);
 
   useEffect(() => {
     callbackRef.current(formatTime(time));
@@ -43,8 +43,7 @@ export const useStopwatch = (callback: (a: string) => void) => {
     }
   }, []);
 
-  useEffect(() => {
-    start();
+  useEffect(() => {    
     return reset;
   }, [start, reset]);
 
