@@ -95,7 +95,7 @@ const ButtonLayout = ({
             style={{backgroundColor: running ? '#420e0d' : '#1b361f'}}>
             <Boarder />
             <ButtonText style={{color: running ? '#ef4f4d' : '#50d137'}}>
-              {running ? 'Reset' : 'Start'}
+              {running ? 'Stop' : 'Start'}
             </ButtonText>
           </StartStopButton>
         </Pressable>
