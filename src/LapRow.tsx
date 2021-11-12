@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { memo } from 'react';
+
 import styled from '@emotion/native';
 
 const LapContainer = styled.View`
@@ -49,4 +50,4 @@ const LapRow = ({lap, index, color}: LapRowProps) => {
   );
 };
 
-export default LapRow;
+export default memo(LapRow);

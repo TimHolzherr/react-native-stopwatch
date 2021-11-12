@@ -10,6 +10,13 @@ const LapContainer = styled.View`
   margin: 0px 30px 0px 30px;
 `;
 
+const SingleLine = styled.View`
+  height: 1px;
+  border-color: #3d3d3d;
+  border-width: 1px 0px 0px 0px;
+  flex-direction: row;
+`;
+
 type LapLayoutProps = {
   laps: string[];
   time: string;
@@ -20,6 +27,7 @@ const LapLayout = ({laps, time, running}: LapLayoutProps) => {
   return (
     <LapContainer>
       <ScrollView>
+        {!running && laps.length == 0 ? <SingleLine/> : null}
         {running ? (
           <LapRow key={-1} lap={time} color="#fff" index={laps.length + 1} />
         ) : null}
