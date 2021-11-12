@@ -18,6 +18,7 @@ export const useStopwatch = (
   const intervalRef = useRef<number>();
   const startTimeRef = useRef<number>(0);
   const lastLapTimeRef = useRef<number>(0);
+  const timeRef = useRef<number>(0);
 
   useEffect(() => {
     updateTimeRef.current = updateTime;
@@ -35,15 +36,17 @@ export const useStopwatch = (
 
   const start = useCallback(() => {
     setRunning(true);
-    startTimeRef.current = Date.now();
+    startTimeRef.current = Date.now() - timeRef.current;
     intervalRef.current = <number>(<unknown>setInterval(() => {
       //TODO: Type!
       const time = Date.now() - startTimeRef.current;
       setTime(time);
+      timeRef.current = time;
     }, 11));
   }, []);
 
   const reset = useCallback(() => {
+    timeRef.current = 0;
     setTime(0);
     startTimeRef.current = 0;
     setRunning(false);
@@ -51,6 +54,8 @@ export const useStopwatch = (
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
+    setLaps([]);
+    lastLapTimeRef.current = 0;
   }, []);
 
   const takeLap = useCallback(() => {
@@ -60,14 +65,16 @@ export const useStopwatch = (
     lastLapTimeRef.current = currentTime;
   }, []);
 
-  const resetLap = useCallback(() => {
-    setLaps([]);
-    lastLapTimeRef.current = 0;
+  const stop = useCallback(() => {
+    setRunning(false);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
   }, []);
 
   useEffect(() => {
     return reset;
   }, [start, reset]);
 
-  return {start, reset, takeLap, resetLap, laps, running};
+  return {start, reset, takeLap, stop, laps, running};
 };

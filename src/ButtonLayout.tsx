@@ -63,7 +63,7 @@ type ButtonLayoutProp = {
   reset: () => void;
   start: () => void;
   takeLap: () => void;
-  resetLap: () => void;
+  stop: () => void;
 };
 
 const ButtonLayout = ({
@@ -71,14 +71,14 @@ const ButtonLayout = ({
   reset,
   start,
   takeLap,
-  resetLap,
+  stop,
 }: ButtonLayoutProp) => {
   return (
     <ButtonContainer>
       <LapButtonContainer>
         <Pressable
           style={{alignItems: 'flex-end'}}
-          onPress={running ? takeLap : resetLap}>
+          onPress={running ? takeLap : reset}>
           <LapButton>
             <Boarder />
             <ButtonText style={{color: '#fff'}}>
@@ -90,7 +90,7 @@ const ButtonLayout = ({
       <StartResetButtonContainer>
         <Pressable
           style={{alignItems: 'flex-end'}}
-          onPress={running ? reset : start}>
+          onPress={running ? stop : start}>
           <StartStopButton
             style={{backgroundColor: running ? '#420e0d' : '#1b361f'}}>
             <Boarder />
