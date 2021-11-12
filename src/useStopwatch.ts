@@ -14,7 +14,6 @@ export const useStopwatch = (callback: (a: string) => void) => {
   const intervalRef = useRef<number>();
   const startTimeRef = useRef<number>(0);
   const lastLapTimeRef = useRef<number>(0);
-  const currentTimeRef = useRef<number>(0);
 
   useEffect(() => {
     callbackRef.current = callback;
@@ -35,7 +34,6 @@ export const useStopwatch = (callback: (a: string) => void) => {
       //TODO: Type!
       const time = Date.now() - startTimeRef.current;
       setTime(time);
-      currentTimeRef.current = time;
     }, 11));
   }, []);
 
@@ -44,14 +42,13 @@ export const useStopwatch = (callback: (a: string) => void) => {
     startTimeRef.current = 0;
     setRunning(false);
     lastLapTimeRef.current = 0;
-    currentTimeRef.current = 0;
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
   }, []);
 
   const takeLap = useCallback(() => {
-    const lapTime = currentTimeRef.current - lastLapTimeRef.current;
+    const lapTime = Date.now() - startTimeRef.current - lastLapTimeRef.current;
     setLaps(lap => [...lap, formatTime(lapTime)]);
     lastLapTimeRef.current = time;
   }, []);
