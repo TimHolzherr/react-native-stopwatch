@@ -1,42 +1,29 @@
 import React, {memo} from 'react';
 
 import LapRow from './LapRow';
+import OtherLaps from './otherLaps';
 import {ScrollView} from 'react-native';
 import styled from '@emotion/native';
-
-const LapButton = styled.View`
-  width: 100px;
-  height: 100px;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  border-radius: 100px;
-  background-color: #3d3d3d;
-  position: relative;
-`;
-
-const LapButtonContainer = styled.View`
-  width: 50%;
-  align-items: flex-start;
-`;
 
 const LapContainer = styled.View`
   flex: 1.8;
   margin: 0px 30px 0px 30px;
 `;
 
-const LapLayout = () => {
+type LapLayoutProps = {
+  laps: string[];
+  time: string;
+  running: boolean;
+};
+
+const LapLayout = ({laps, time, running}: LapLayoutProps) => {
   return (
     <LapContainer>
       <ScrollView>
-        <LapRow></LapRow>
-        <LapRow></LapRow>
-        <LapRow></LapRow>
-        <LapRow></LapRow>
-        <LapRow></LapRow>
-        <LapRow></LapRow>
-        <LapRow></LapRow>
-        <LapRow></LapRow>
+        {running ? (
+          <LapRow key={-1} lap={time} color="#fff" index={laps.length + 1} />
+        ) : null}
+        <OtherLaps laps={laps} />
       </ScrollView>
     </LapContainer>
   );

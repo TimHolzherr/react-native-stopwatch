@@ -1,10 +1,10 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 
 const formatTime = (time: number): string => {
-  const leadingZero = (num: number) => (num < 10 ? `0${num}` : num);  
+  const leadingZero = (num: number) => (num < 10 ? `0${num}` : num);
   const minutes = leadingZero(Math.floor(time / 60000) % 100);
   const seconds = leadingZero(Math.floor(time / 1000) % 60);
-  const miliseconds = leadingZero(Math.floor((time / 10)) % 100);
+  const miliseconds = leadingZero(Math.floor(time / 10) % 100);
 
   return `${minutes}:${seconds}:${miliseconds}`;
 };
@@ -13,6 +13,8 @@ export const useStopwatch = (callback: (a: string) => void) => {
   const callbackRef = useRef(callback);
   const intervalRef = useRef<number>();
   const startTimeRef = useRef<number>(0);
+  const lastLapTimeRef = useRef<number>(0);
+  const currentTimeRef = useRef<number>(0);
 
   useEffect(() => {
     callbackRef.current = callback;
@@ -20,6 +22,7 @@ export const useStopwatch = (callback: (a: string) => void) => {
 
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(false);
+  const [laps, setLaps] = useState<string[]>([]);
 
   useEffect(() => {
     callbackRef.current(formatTime(time));
@@ -30,7 +33,9 @@ export const useStopwatch = (callback: (a: string) => void) => {
     startTimeRef.current = Date.now();
     intervalRef.current = <number>(<unknown>setInterval(() => {
       //TODO: Type!
-      setTime(Date.now() - startTimeRef.current);
+      const time = Date.now() - startTimeRef.current;
+      setTime(time);
+      currentTimeRef.current = time;
     }, 11));
   }, []);
 
@@ -38,14 +43,27 @@ export const useStopwatch = (callback: (a: string) => void) => {
     setTime(0);
     startTimeRef.current = 0;
     setRunning(false);
+    lastLapTimeRef.current = 0;
+    currentTimeRef.current = 0;
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
   }, []);
 
-  useEffect(() => {    
+  const takeLap = useCallback(() => {
+    const lapTime = currentTimeRef.current - lastLapTimeRef.current;
+    setLaps(lap => [...lap, formatTime(lapTime)]);
+    lastLapTimeRef.current = time;
+  }, []);
+
+  const resetLap = useCallback(() => {
+    setLaps([]);
+    lastLapTimeRef.current = 0;
+  }, []);
+
+  useEffect(() => {
     return reset;
   }, [start, reset]);
 
-  return {start, reset, running};
+  return {start, reset, takeLap, resetLap, laps, running};
 };

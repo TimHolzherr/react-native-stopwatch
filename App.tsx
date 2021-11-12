@@ -25,15 +25,22 @@ const Timer = styled.Text`
 
 const App = () => {
   var [watch, setWatch] = useState('00:00:00');
-  var {start, reset, running} = useStopwatch(setWatch);
+  var {start, reset, takeLap, resetLap, laps, running} = useStopwatch(setWatch);
+
   return (
     <>
       <Top>
         <Timer>{watch}</Timer>
       </Top>
       <Bottom>
-        <ButtonLayout running={running} start={start} reset={reset} />
-        <LapLayout />
+        <ButtonLayout
+          running={running}
+          start={start}
+          reset={reset}
+          takeLap={takeLap}
+          resetLap={resetLap}
+        />
+        <LapLayout laps={laps} time={watch} running={running} />
       </Bottom>
     </>
   );

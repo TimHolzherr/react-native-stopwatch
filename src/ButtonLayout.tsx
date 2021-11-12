@@ -62,13 +62,23 @@ type ButtonLayoutProp = {
   running: boolean;
   reset: () => void;
   start: () => void;
+  takeLap: () => void;
+  resetLap: () => void;
 };
 
-const ButtonLayout = ({running, reset, start}: ButtonLayoutProp) => {
+const ButtonLayout = ({
+  running,
+  reset,
+  start,
+  takeLap,
+  resetLap,
+}: ButtonLayoutProp) => {
   return (
     <ButtonContainer>
       <LapButtonContainer>
-        <Pressable style={{alignItems: 'flex-end'}}>
+        <Pressable
+          style={{alignItems: 'flex-end'}}
+          onPress={running ? takeLap : resetLap}>
           <LapButton>
             <Boarder />
             <ButtonText style={{color: '#fff'}}>
