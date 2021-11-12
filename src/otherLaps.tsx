@@ -6,14 +6,18 @@ type OtherLapsProps = {
   laps: string[];
 };
 
-const calculateColor = (index: number, length: number) => {
-  if (length < 2) {
+const calculateColor = (index: number, laps: string[]) => {
+  if (laps.length < 2) {
     return '#fff';
   }
-  if (index === 0) {
+  // TODO: Performance
+  const sortedLaps = [...laps].sort();
+  let minIndex = laps.indexOf(sortedLaps[0]);
+  let maxIndex = laps.indexOf(sortedLaps[sortedLaps.length - 1]);
+  if (index === minIndex) {
     return 'green';
   }
-  if (index === length - 1) {
+  if (index === maxIndex) {
     return 'red';
   }
   return '#fff';
@@ -27,7 +31,7 @@ const OtherLaps = ({laps}: OtherLapsProps) => {
         key={index}
         index={index + 1}
         lap={lap}
-        color={calculateColor(index, laps.length)}
+        color={calculateColor(index, laps)}
       />
     );
   });

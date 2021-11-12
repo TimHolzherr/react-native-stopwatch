@@ -25,7 +25,8 @@ const Timer = styled.Text`
 
 const App = () => {
   var [watch, setWatch] = useState('00:00:00');
-  var {start, reset, takeLap, resetLap, laps, running} = useStopwatch(setWatch);
+  var [lastLap, setLastLap] = useState('00:00:00');
+  var {start, reset, takeLap, resetLap, laps, running} = useStopwatch(setWatch, setLastLap);
 
   return (
     <>
@@ -40,7 +41,7 @@ const App = () => {
           takeLap={takeLap}
           resetLap={resetLap}
         />
-        <LapLayout laps={laps} time={watch} running={running} />
+        <LapLayout laps={laps} time={lastLap} running={running} />
       </Bottom>
     </>
   );

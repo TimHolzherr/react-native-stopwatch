@@ -9,22 +9,28 @@ const formatTime = (time: number): string => {
   return `${minutes}:${seconds}:${miliseconds}`;
 };
 
-export const useStopwatch = (callback: (a: string) => void) => {
-  const callbackRef = useRef(callback);
+export const useStopwatch = (
+  updateTime: (a: string) => void,
+  updateLap: (a: string) => void,
+) => {
+  const updateTimeRef = useRef(updateTime);
+  const updateLapRef = useRef(updateLap);
   const intervalRef = useRef<number>();
   const startTimeRef = useRef<number>(0);
   const lastLapTimeRef = useRef<number>(0);
 
   useEffect(() => {
-    callbackRef.current = callback;
-  }, [callback]);
+    updateTimeRef.current = updateTime;
+    updateLapRef.current = updateLap;
+  }, [updateTime, updateLap]);
 
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(false);
   const [laps, setLaps] = useState<string[]>([]);
 
   useEffect(() => {
-    callbackRef.current(formatTime(time));
+    updateTimeRef.current(formatTime(time));
+    updateLapRef.current(formatTime(time - lastLapTimeRef.current));
   }, [time]);
 
   const start = useCallback(() => {
@@ -48,9 +54,10 @@ export const useStopwatch = (callback: (a: string) => void) => {
   }, []);
 
   const takeLap = useCallback(() => {
-    const lapTime = Date.now() - startTimeRef.current - lastLapTimeRef.current;
+    const currentTime = Date.now() - startTimeRef.current;
+    const lapTime = currentTime - lastLapTimeRef.current;
     setLaps(lap => [...lap, formatTime(lapTime)]);
-    lastLapTimeRef.current = time;
+    lastLapTimeRef.current = currentTime;
   }, []);
 
   const resetLap = useCallback(() => {
